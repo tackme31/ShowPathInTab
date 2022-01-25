@@ -1,0 +1,35 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ShowPathInTab;assembly=ShowPathInTab"
+    xmlns:viewModels="clr-namespace:ShowPathInTab.ViewModels;assembly=ShowPathInTab"
+    xmlns:wm="clr-namespace:Microsoft.VisualStudio.Platform.WindowManagement;assembly=Microsoft.VisualStudio.Platform.WindowManagement">
+
+    <DataTemplate x:Key="ShowPathInTabInnerTemplate" DataType="{x:Type viewModels:TabViewModel}">
+        <StackPanel Orientation="Horizontal">
+            <ContentControl Content="{Binding Title}" ContentTemplate="{Binding TitleTemplate}" />
+            <TextBlock
+                Name="TabPathText"
+                Margin="4,0,0,0"
+                VerticalAlignment="Center"
+                FontSize="11"
+                Opacity="0.6"
+                Text="{Binding DisplayPath}" />
+        </StackPanel>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsPathVisible}" Value="False">
+                <DataTrigger.Setters>
+                    <Setter TargetName="TabPathText" Property="Visibility" Value="Collapsed" />
+                </DataTrigger.Setters>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ShowPathInTabTemplate" DataType="{x:Type wm:WindowFrameTitle}">
+        <ContentControl
+            Content="{Binding}"
+            ContentTemplate="{StaticResource ShowPathInTabInnerTemplate}"
+            DataContext="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=DataContext.(local:TabTitleManager.TabViewModel)}" />
+    </DataTemplate>
+</ResourceDictionary>
